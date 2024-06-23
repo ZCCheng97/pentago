@@ -1,22 +1,9 @@
 import numpy as np
-from const import rotations
 
-def display_board(board):
-    return board
-
-def apply_move(board,turn,row,col,rot):
-    
-    # move added
-    board[row, col] = turn
-
-    # returns board with rotation input
-    return rotate(board,rot)
-
-def check_move(board: np.ndarray,row,col):
+def check_move(board,row,col):
     """Checks if move is valid.
 
     Args:
-        board (np.ndarray): The game board.
         row (int): Row idx, between 0 and len(board)-1.
         col (int): Col idx, between 0 and len(board[0])-1.
 
@@ -29,21 +16,6 @@ def check_move(board: np.ndarray,row,col):
         return False
     else:
         return True
-
-def rotate(board: np.ndarray, rot: int):
-  """Rotates the chosen quadrant of the board clockwise or anticlockwise.
-
-  Args:
-      board (np.ndarray): The game board
-      rot (int): The integers 1 to 8 each signifying one of the 4 quadrants and 1 of 2 rotational directions.
-
-  Returns:
-      np.ndarray: The rotated board.
-  """
-  rotation = rotations[rot]
-  rows,cols = rotation["rowcols"]
-  turns = rotation["turn"]
-  return np.rot90(board[rows,cols],turns)
 
 def subsetter(board: np.ndarray, dims: int = 5):
     """Generates an array of board subsets of shape (dims, dims), to facilitate checks of rows, cols or diagonals

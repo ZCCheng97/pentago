@@ -1,9 +1,7 @@
-import numpy as np
-
-board_quadrants = {"tr":(np.arange(3),np.arange(3,6)),
-                   "br":(np.arange(3,6),np.arange(3,6)),
-                   "bl":(np.arange(3,6),np.arange(3)),
-                   "tl":(np.arange(3),np.arange(3)),}
+board_quadrants = {"tr":(slice(0,3),slice(3,6)),
+                   "br":(slice(3,6),slice(3,6)),
+                   "bl":(slice(3,6),slice(3)),
+                   "tl":(slice(3),slice(3)),}
 
 turn_direction = {"cw":-1,
                   "ccw":1}

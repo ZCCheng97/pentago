@@ -1,5 +1,8 @@
-import numpy as np
+from board import Board
+from status_check import *
 
-a = np.arange(9).reshape((3,3))
-b = np.array([1,2,3])
-print(b.ndim)
+b = Board()
+b.apply_move(2,0,0)
+b.rotate(3)
+
+print(b)

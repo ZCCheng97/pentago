@@ -44,7 +44,7 @@ def checkWin(board: np.ndarray):
   else:
     return 0
   
-def check_victory(board):
+def check_victory(board: np.ndarray):
     wincon = {1:False,2:False,3:False}
     tempboard = board.copy()
     sub_boards = subsetter(tempboard)
@@ -52,6 +52,7 @@ def check_victory(board):
         win_status = checkWin(sub_board)
         if win_status in wincon:
             wincon[win_status] = True
+
     if (wincon[3] or 
         (wincon[1] and wincon[2]) or
         (np.count_nonzero(board) == 36)):
@@ -67,4 +68,4 @@ def check_victory(board):
 # t[:,3] = np.ones((5,))+1 # controls 2s
 # t[:,2] = np.ones((5,)) #controls 1s
 # print(t)
-# print(checkWin(t))
+# print(check_victory(t))
