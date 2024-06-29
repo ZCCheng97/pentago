@@ -1,4 +1,4 @@
-from pentago import menu
+from pentago import Pentago
 
 if __name__ == "__main__":
-  menu()
+  Pentago.run()

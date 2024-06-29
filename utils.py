@@ -1,5 +1,17 @@
 import numpy as np
 
+from const import BOARD_SIZE, WIN_CONDITION
+from board import Board
+
+
+def correct_int_input(inp:str,lower:int,upper:int):
+    if not str(inp).isdigit():
+        return False
+    int_inp = int(inp)
+    if int_inp > upper or int_inp < lower:
+        return False
+    return True
+
 def check_move(board,row,col):
     """Checks if move is valid.
 
@@ -10,7 +22,7 @@ def check_move(board,row,col):
     Returns:
         bool: True if move is valid, False if otherwise.
     """
-    if row >= 6 or col >= 6:
+    if row >= BOARD_SIZE or col >= BOARD_SIZE:
         return False
     if board[row,col] == 1 or board[row,col] == 2:
         return False
@@ -35,7 +47,7 @@ def subsetter(board: np.ndarray, dims: int = 5):
     rows, cols = board.shape
     for rowIdx in np.arange(rows-dims+1):
         for colIdx in np.arange(cols-dims+1):
-            output.append(board[np.arange(rowIdx,rowIdx+dims),np.arange(colIdx,colIdx+dims)])
+            output.append(board[slice(rowIdx,rowIdx+dims),slice(colIdx,colIdx+dims)])
     return np.array(output)
 
 def get_all_series(board: np.ndarray):

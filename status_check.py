@@ -1,6 +1,7 @@
 import numpy as np
 
 from utils import get_all_series, subsetter
+from const import * 
 
 # For checking winning moves.
 
@@ -63,9 +64,4 @@ def check_victory(board: np.ndarray):
         return 2
     else:
         return 0
-
-# t = np.zeros((5,5))
-# t[:,3] = np.ones((5,))+1 # controls 2s
-# t[:,2] = np.ones((5,)) #controls 1s
-# print(t)
-# print(check_victory(t))
+    

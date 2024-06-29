@@ -1,13 +1,16 @@
 import numpy as np
 
-from const import rotations
+from const import BOARD_SIZE,rotations
 
 class Board:
-    def __init__(self, dims: int=6):
+    def __init__(self, dims: int=BOARD_SIZE):
         self.board = np.zeros((dims,dims),dtype=np.int8)
     
     def __str__(self):
         return np.array2string(self.board, separator=' ')
+    
+    def __call__(self): 
+        return self.board
     
     def display_board(self):
         # Convert the array to a string for better formatting
@@ -24,12 +27,18 @@ class Board:
       Returns:
           np.ndarray: The rotated board.
       """
+      if not rot: 
+        return None
       rotation = rotations[rot]
       rows,cols = rotation["rowcols"]
       turns = rotation["turn"]
       self.board[rows,cols] = np.rot90(self.board[rows,cols], k= turns)
 
-    def apply_move(self,turn: int,row: int,col: int):
+    def apply_move(self,turn: int,row: int,col: int, rot: int=0):
       # move added
       self.board[row, col] = turn
+      self.rotate(rot)
 
+# b = Board()
+# b.apply_move(1,0,1,0)
+# print(b)
