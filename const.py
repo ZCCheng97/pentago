@@ -1,5 +1,8 @@
 BOARD_SIZE = 6 # size of board (should always be an EVEN value!)
 WIN_CONDITION = 5 # how many in a row to win (should always be SMALLER than BOARD_SIZE)
+PLAYER_NUM = 2
+
+DRAW = -1
 
 # Game states
 SETUP = 0

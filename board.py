@@ -38,7 +38,3 @@ class Board:
       # move added
       self.board[row, col] = turn
       self.rotate(rot)
-
-# b = Board()
-# b.apply_move(1,0,1,0)
-# print(b)

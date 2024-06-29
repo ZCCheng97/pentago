@@ -2,6 +2,7 @@ import numpy as np
 
 from utils import get_all_series, subsetter
 from const import * 
+from board import Board
 
 # For checking winning moves.
 
@@ -18,50 +19,71 @@ def checkSeries(series: np.ndarray):
 
   return series[0] if np.all(series == series[0]) else 0
 
-def checkWin(board: np.ndarray):
+def check_subboard_win(board: np.ndarray, player_num:int = 2):
   """Checks the subsection of the board if there is a winner along a row, column or diagonal.
 
   Args:
       board (np.ndarray): The subsection of the game board.
 
   Returns:
-      int: 3 if a draw is found, else the winner 1 or 2, or 0 if no winner is found.
+      int: -1 if a draw is found, else the winner's id, or 0 if no winner is found.
   """
-  winning_player = {1:False,
-                    2: False}
+  winning_player = np.array([False]*player_num)
   series = get_all_series(board)
 
   for serie in series:
     winner = checkSeries(serie)
-    if winner in winning_player:
-      winning_player[winner] = True
+    if winner > 0:
+      winning_player[winner-1] = True
   
-  if winning_player[1] and winning_player[2]:
-    return 3
-  elif winning_player[1]:
-    return 1
-  elif winning_player[2]:
-    return 2
+  if winning_player.sum() > 1:
+    return -1
+  elif winning_player.sum() == 1:
+    return winning_player.argmax()+1
   else:
     return 0
   
-def check_victory(board: np.ndarray):
-    wincon = {1:False,2:False,3:False}
+def check_win(board: np.ndarray,player_num:int = 2):
+    """Checks who the winning player is. 
+
+    Args:
+        board (np.ndarray): The game board.
+        player_num (int, optional): Number of players. Defaults to 2.
+
+    Returns:
+        int: -1 if a draw is found, else the winner's id, or 0 if no winner is found.
+    """
+    
+    wincon = np.array([False]*player_num)
     tempboard = board.copy()
     sub_boards = subsetter(tempboard)
     for sub_board in sub_boards:
-        win_status = checkWin(sub_board)
-        if win_status in wincon:
-            wincon[win_status] = True
+        win_status = check_subboard_win(sub_board)
+        if win_status == -1:
+            return -1
+        elif win_status:
+            wincon[win_status-1] = True
 
-    if (wincon[3] or 
-        (wincon[1] and wincon[2]) or
+    if (wincon.sum() > 1 or
         (np.count_nonzero(board) == 36)):
-        return 3
-    elif wincon[1]:
-        return 1
-    elif wincon[2]:
-        return 2
+        return -1
+    elif wincon.sum() == 1:
+        return wincon.argmax()+1
     else:
         return 0
-    
+
+def check_victory(board:Board, rot, player_num:int=2):
+    check = check_win(board.board)
+    if check:
+        board.display_board()
+        print("The game has ended in a draw! Game over.") if check == -1 else  print(f"Player {check} has won! Game over.")
+        return check
+
+    board.rotate(rot)
+
+    check = check_win(board.board)
+    if check:
+        board.display_board()
+        print("The game has ended in a draw! Game over.") if check == -1 else  print(f"Player {check} has won! Game over.")
+        return check
+    return 0

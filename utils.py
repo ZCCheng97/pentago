@@ -1,6 +1,6 @@
 import numpy as np
 
-from const import BOARD_SIZE, WIN_CONDITION
+from const import BOARD_SIZE
 from board import Board
 
 
