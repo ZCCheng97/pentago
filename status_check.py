@@ -1,6 +1,6 @@
 import numpy as np
 
-from utils import get_all_series, subsetter
+from utils import get_all_series, subsetter,check_move
 from const import * 
 from board import Board
 
@@ -73,6 +73,7 @@ def check_win(board: np.ndarray,player_num:int = 2):
         return 0
 
 def check_victory(board:Board, rot, player_num:int=2):
+    board =  board.copy()
     check = check_win(board.board)
     if check:
         board.display_board()
@@ -87,3 +88,18 @@ def check_victory(board:Board, rot, player_num:int=2):
         print("The game has ended in a draw! Game over.") if check == -1 else  print(f"Player {check} has won! Game over.")
         return check
     return 0
+
+def list_M1s(board:Board, player_id:int=2, winning_player:int=2):
+    rows,cols = board.board.shape
+    outputs = list()
+    for row in range(rows):
+       for col in range(cols):
+          for rot in range(8):
+            board_copy = board.copy()
+            if check_move(board_copy.board, row, col):
+                board_copy.apply_move(player_id,row,col,rot)
+                if check_win(board_copy.board) == winning_player:
+                    outputs.append((player_id, row, col, rot))
+    return outputs
+             
+

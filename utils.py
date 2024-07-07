@@ -3,7 +3,6 @@ import numpy as np
 from const import BOARD_SIZE
 from board import Board
 
-
 def correct_int_input(inp:str,lower:int,upper:int):
     if not str(inp).isdigit():
         return False
@@ -12,7 +11,7 @@ def correct_int_input(inp:str,lower:int,upper:int):
         return False
     return True
 
-def check_move(board,row,col):
+def check_move(board:np.ndarray,row:int,col:int): 
     """Checks if move is valid.
 
     Args:

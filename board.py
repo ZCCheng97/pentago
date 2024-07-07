@@ -9,6 +9,11 @@ class Board:
     def __str__(self):
         return np.array2string(self.board, separator=' ')
     
+    def copy(self):
+       copy = Board(dims = BOARD_SIZE)
+       copy.board = self.board.copy()
+       return copy
+    
     def __call__(self): 
         return self.board
     

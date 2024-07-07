@@ -3,7 +3,7 @@ import random
 
 from board import Board
 from utils import check_move
-from status_check import check_victory
+from status_check import check_victory,list_M1s
 from player import Player
 from const import *
 
@@ -12,102 +12,33 @@ class Computer(Player):
         super().__init__(id)
         self.level = level
 
-    def random_move(self,board:np.ndarray):
+    def easy(self,board:Board):
         while True:
             row = random.randint(0,BOARD_SIZE-1)
             col = random.randint(0,BOARD_SIZE-1)
             rot = random.randint(1,8)
-            if check_move(board, row, col):
+            if check_move(board.board, row, col):
                 return self.id,row,col,rot
+    
+    def medium(self,board:Board):
+        # take note: to block a winning move, the AI most likely has to take an enemy winning position and make a move such that
+        # it reaches a M2 state for the opponent,as if it reaches a M1 state, the opponent just wins anyway.
+        # and of course it should never make a move where it is a M0 in the first place.
 
-    def request_move(self,board:np.ndarray):
+        moves = list_M1s(board,self.id,self.id) # already account for valid move.
+        if moves:
+            num_pos_moves = len(moves)
+            _,row,col,rot = moves[random.randint(0,num_pos_moves-1)]
+            if not rot:
+                rot = random.randint(1,8)
+            return self.id,row,col,rot
+
+        return self.easy(board)
+
+    def request_move(self,board:Board):
         if self.level == EASY:
-            return self.random_move(board)
+            return self.easy(board)
+        if self.level== MEDIUM:
+            return self.medium(board)
 
-        # if self.level == 2:
-        #     pass
-        #     possible_moves = 0
-        #     winning_array = []
-        #     winning_row = 6
-        #     winning_col = 6
-        #     winning_rot = 9
-        #     blocking_coord = []
-        #     blocking_coordlist = []
-        #     tempboard = board.copy()
-
-        #     # AI checks for possible winning moves
-
-        #     for rot_iter in range(9):
-        #         tempboard = board.copy()
-        #         rotate(tempboard, rot_iter)
-        #         for row_iter in range(6):
-        #             for col_iter in range(6):
-        #                 if check_move(board, row_iter, col_iter):
-        #                     tempboard[row_iter, col_iter] = turn
-        #                     if check_victory(tempboard, turn, 0) == turn:
-        #                         tempboard[row_iter, col_iter] = 10
-        #                         rotate(tempboard, rot_iter)
-        #                         rotate(tempboard, rot_iter)
-        #                         rotate(tempboard, rot_iter)
-        #                         winning_array = np.where(tempboard == 10)
-        #                         winning_row = int(winning_array[0])
-        #                         winning_col = int(winning_array[1])
-        #                         winning_rot = rot_iter
-        #                         possible_moves += 1
-        #                         rotate(tempboard, rot_iter)
-        #                 tempboard = board.copy()
-        #                 rotate(tempboard, rot_iter)
-        #     if possible_moves >= 1:
-        #         if check_move(board, winning_row, winning_col):
-        #             return winning_row, winning_col, winning_rot
-        #         else:
-        #             possible_moves = 0
-
-        #     # AI checks if opponent has winning moves
-
-        #     if possible_moves == 0:
-        #         for rot_iter in range(9):
-        #             tempboard = board.copy()
-        #             rotate(tempboard, rot_iter)
-        #             for row_iter in range(6):
-        #                 for col_iter in range(6):
-        #                     if check_move(board, row_iter, col_iter):
-        #                         tempboard[row_iter, col_iter] = abs(turn-3)
-        #                         if check_victory(tempboard, turn, 0) == abs(turn-3):
-        #                             tempboard[row_iter, col_iter] = 10
-        #                             rotate(tempboard, rot_iter)
-        #                             rotate(tempboard, rot_iter)
-        #                             rotate(tempboard, rot_iter)
-        #                             winning_array = np.where(tempboard == 10)
-        #                             winning_row = int(winning_array[0])
-        #                             winning_col = int(winning_array[1])
-        #                             winning_rot = rot_iter
-        #                             blocking_coord = [winning_row, winning_col]
-        #                             blocking_coordlist.append(blocking_coord)
-        #                             possible_moves += 1
-        #                             rotate(tempboard, rot_iter)
-        #                     tempboard = board.copy()
-        #                     rotate(tempboard, rot_iter)
-
-        #         if possible_moves >= 1 and all(x == blocking_coordlist[0] for x in blocking_coordlist):
-        #             if check_move(board, winning_row, winning_col):
-        #                 return winning_row, winning_col, winning_rot
-        #             else:
-        #                 while True:
-        #                     rand_row = random.randint(0, 5)
-        #                     rand_col = random.randint(0, 5)
-        #                     rand_rot = random.randint(1, 8)
-        #                     if check_move(board, rand_row, rand_col):
-        #                         return rand_row, rand_col, rand_rot
-
-        #     # AI makes random move if it neither has winning moves, nor if the opponent has winning moves
-
-        #     while True:
-        #         rand_row = random.randint(0, 5)
-        #         rand_col = random.randint(0, 5)
-        #         rand_rot = random.randint(1, 8)
-        #         if check_move(board, rand_row, rand_col):
-        #             return rand_row, rand_col, rand_rot
-
-
-# print(Computer(1).request_move(Board().board))
+        

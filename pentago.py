@@ -37,13 +37,18 @@ class Pentago:
             self.board.display_board()
             turn,row,col,rot = self.players[curr_player].request_move(self.board.board)
             
-            if not check_move(self.board.board,row,col) and curr_player == 1:
+            while not check_move(self.board.board,row,col) and curr_player == 1:
                 print(f"The move you entered was not valid.")
                 turn,row,col,rot = self.players[curr_player].request_move(self.board.board)
             self.board.apply_move(turn,row,col,0)
             
+            if check_victory(self.board,0):
+                self.state = ENDED
+                break
+            self.board.rotate(rot)
             if check_victory(self.board,rot):
                 self.state = ENDED
+                break
             self.turn_num += 1
 
     def pvp(self):
@@ -60,13 +65,18 @@ class Pentago:
             self.board.display_board()
             turn,row,col,rot = self.players[curr_player].request_move(self.board.board)
             
-            if not check_move(self.board.board,row,col):
+            while not check_move(self.board.board,row,col):
                 print(f"The move you entered was not valid.")
                 turn,row,col,rot = self.players[curr_player].request_move(self.board.board)
             self.board.apply_move(turn,row,col,0)
             
+            if check_victory(self.board,0):
+                self.state = ENDED
+                break
+            self.board.rotate(rot)
             if check_victory(self.board,rot):
                 self.state = ENDED
+                break
             self.turn_num += 1
 
     def run(self):
@@ -77,3 +87,10 @@ class Pentago:
                 self.pva()
             elif self.state == PVP:
                 self.pvp()
+
+# b = Board()
+# b.board[0:3,0] = np.full((3,),2)
+# b.board[4,0] = 2
+# c = Computer(2,MEDIUM)
+# print(b)
+# print(c.request_move(b))
